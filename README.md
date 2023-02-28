@@ -5,6 +5,11 @@ A simple game where the player plays against the CPU.
 The player starts and makes a first move. After the first move, the CPU makes his movie immediately. The goal of the game is to get three in a row.
 
 ## Gameplay
+There are three ways a round can be ended
+- the player wins by selecting three tiles in a row (horizontally, vertically or crossed)
+- the CPU wins by selecting three tiles in a row (horizontally, vertically or crossed)
+- the game ends in a tie if there is no clear winner
+
 At the start the screen is empty and no scores are written.
 
 ![image](https://user-images.githubusercontent.com/12195753/221785538-7085edbf-cde3-4b59-bd74-f89cc6a2492e.png)
