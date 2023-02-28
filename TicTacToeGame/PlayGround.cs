@@ -159,35 +159,29 @@ namespace WinFormsApp1
                     isMatchPlayer = line.All(x => playerMoves.Any(y => y == x));
                     isMatchCPU = line.All(x => computerMoves.Any(y => y == x));
 
-                    if(isMatchPlayer || isMatchCPU)
+                    if (isMatchPlayer)
                     {
+                        MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
+                        AddScore(humanPlayer);
+                        NextGame();
+
                         break;
                     }
+                    else if (isMatchCPU)
+                    {
+                        MessageBox.Show(StringConstants.COMPUTER_WINS_MESSAGE);
+                        AddScore(computerPlayer);
+                        NextGame();
+
+                        break;
+                    }
+
+                    if (buttons.All(x => x.Text != string.Empty))
+                    {
+                        MessageBox.Show(StringConstants.THE_MATCH_IS_A_TIE);
+                        NextGame();
+                    }
                 }
-
-                if (isMatchPlayer || isMatchCPU)
-                {
-                    break;
-                }
-            }
-
-            if (isMatchPlayer)
-            {
-                MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
-                AddScore(humanPlayer);
-                NextGame();
-            }
-            else if (isMatchCPU)
-            {
-                MessageBox.Show(StringConstants.COMPUTER_WINS_MESSAGE);
-                AddScore(computerPlayer);
-                NextGame();
-            }
-
-            if (buttons.All(x => x.Text != string.Empty))
-            {
-                MessageBox.Show(StringConstants.THE_MATCH_IS_A_TIE);
-                NextGame();
             }
         }
 
