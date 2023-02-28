@@ -21,3 +21,6 @@ After this message the board has been cleared and a new round will begin. The sc
 
 ![image](https://user-images.githubusercontent.com/12195753/221786074-148216a3-bd0c-467e-a164-7ef543819978.png)
 
+The player can also reset the score with the `RESTART GAME` button. When this is pressed the board and the scores of the player and CPU will be cleared
+
+![image](https://user-images.githubusercontent.com/12195753/221786674-53549af0-6a0d-4607-a54a-69300d9473a1.png)
