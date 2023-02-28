@@ -4,12 +4,10 @@ namespace WinFormsApp1
 {
     public partial class PlayGround : Form
     {
-        private int playerScore;
-        private int computerScore;
         private List<Button> buttons;
         private Random randomSelection;
-        private Player humanPlayer;
-        private Player computerPlayer;
+        private int playerScore, computerScore;
+        private Player humanPlayer, computerPlayer;
 
         private GameLogic gameLogic;
         private readonly List<KeyValuePair<Button, int>> tiles;
@@ -83,9 +81,9 @@ namespace WinFormsApp1
                 var selection = randomSelection.Next(buttons.Count);
                 selectedTile = buttons[selection];
             }
-            while (selectedTile.Text != String.Empty && buttons.Any(x => x.Enabled == true));
+            while (selectedTile.Text != string.Empty && buttons.Any(x => x.Enabled == true));
 
-            if (selectedTile.Text.Equals(String.Empty))
+            if (selectedTile.Text.Equals(string.Empty))
             {
                 selectedTile.Text = Player.O.ToString();
                 selectedTile.Enabled = false;
