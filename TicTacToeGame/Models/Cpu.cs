@@ -8,12 +8,14 @@ namespace TicTacToe.Models
         public string Name { get; set; }
         public int Score { get; set; }
         public string UserIcon { get; set; }
+        public GameAnnouncements User { get; set; }
 
         public Cpu()
         {
             Name = "CPU";
             Score = 0;
             UserIcon = "O";
+            User = GameAnnouncements.CPU_WINS;
         }
 
         public string GetName()

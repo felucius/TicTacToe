@@ -1,4 +1,6 @@
 ﻿
+using TicTacToe.Models;
+
 namespace TicTacToe.Interfaces
 {
     public interface IUser
@@ -6,6 +8,8 @@ namespace TicTacToe.Interfaces
         public string Name { get; set; }
         public int Score { get; set; }
         public string UserIcon { get; set; }
+
+        public GameAnnouncements User { get; set; }
 
         public string GetName();
 

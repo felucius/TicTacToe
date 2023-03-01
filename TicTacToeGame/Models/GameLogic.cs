@@ -1,4 +1,5 @@
-﻿using TicTacToe.Models.Extensions;
+﻿using TicTacToe.Interfaces;
+using TicTacToe.Models.Extensions;
 
 namespace TicTacToe.Models
 {
@@ -6,13 +7,11 @@ namespace TicTacToe.Models
     {
         private readonly Random randomSelection;
         readonly List<KeyValuePair<Button, int>> board;
-        private readonly List<KeyValuePair<Button, int>> tiles;
 
         public GameLogic()
         {
             board = new List<KeyValuePair<Button, int>>();
             randomSelection = new Random();
-            tiles = CreateBoard(buttons);
 
         }
 
@@ -72,20 +71,20 @@ namespace TicTacToe.Models
         /// Adds the score to the designated player
         /// </summary>
         /// <param name="player">the player who has won</param>
-        private void AddScore(Player player)
+        public void AddPlayerScore(Player player)
         {
-            switch (player)
-            {
-                case Player.X:
+            var currentScore = player.GetScore();
+            player.SetScore(currentScore++);
+        }
 
-                    playerScore++;
-                    lblPlayer.Text = StringConstants.PLAYER_SCORE_BOARD + playerScore.ToString();
-                    break;
-                case Player.O:
-                    computerScore++;
-                    lblComputer.Text = StringConstants.COMPUTER_SCORE_BOARD + computerScore.ToString();
-                    break;
-            }
+        /// <summary>
+        /// Adds the score to the designated player
+        /// </summary>
+        /// <param name="player">the player who has won</param>
+        public void AddCpuScore(Cpu cpuPlayer)
+        {
+            var currentScore = cpuPlayer.GetScore();
+            cpuPlayer.SetScore(currentScore++);
         }
 
         /// <summary>
@@ -104,7 +103,7 @@ namespace TicTacToe.Models
         /// <summary>
         /// Checking the tiles and different patterns of the TicTacToe game for who has won
         /// </summary>
-        public void CheckWinner()
+        public GameAnnouncements CheckWinner(List<KeyValuePair<Button, int>> tiles)
         {
             var lines = CheckBoardLines();
             var playerMoves = new List<int>();
@@ -135,34 +134,27 @@ namespace TicTacToe.Models
 
                     if (isMatchPlayer)
                     {
-                        MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
-                        AddScore(humanPlayer);
-                        NextGame();
-
-                        break;
+                        return GameAnnouncements.PLAYER_WINS;
                     }
                     else if (isMatchCPU)
                     {
-                        MessageBox.Show(StringConstants.COMPUTER_WINS_MESSAGE);
-                        AddScore(computerPlayer);
-                        NextGame();
-
-                        break;
+                        return GameAnnouncements.CPU_WINS;
                     }
 
-                    if (buttons.All(x => x.Text != string.Empty))
+                    if (tiles.All(x => x.Key.Text != string.Empty))
                     {
-                        MessageBox.Show(StringConstants.THE_MATCH_IS_A_TIE);
-                        NextGame();
+                        return GameAnnouncements.TIE;
                     }
                 }
             }
+
+            return GameAnnouncements.ONGOING;
         }
 
         /// <summary>
         /// Version of a stupid AI
         /// </summary>
-        public void ComputerSelectionStupid(Button selectedTile, List<Button> board)
+        public void ComputerSelectionStupid(Button selectedTile, List<Button> board, Cpu cpuPlayer)
         {
             // If selection already contains an disabled button with the players choice, than a new tile is being searched for
             do
@@ -174,7 +166,7 @@ namespace TicTacToe.Models
 
             if (selectedTile.Text.Equals(string.Empty))
             {
-                selectedTile.Text = Player.O.ToString();
+                selectedTile.Text = cpuPlayer.GetUserIcon();
                 selectedTile.Enabled = false;
                 selectedTile.BackColor = Color.PaleVioletRed;
             }
