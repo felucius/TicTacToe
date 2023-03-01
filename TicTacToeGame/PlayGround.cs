@@ -1,11 +1,11 @@
-using TicTacToe;
+using TicTacToe.Models;
+using TicTacToe.Models.Extensions;
 
-namespace WinFormsApp1
+namespace TicTacToe
 {
     public partial class PlayGround : Form
     {
         private List<Button> buttons;
-        private Random randomSelection;
         private int playerScore, computerScore;
         private Player humanPlayer, computerPlayer;
 
@@ -19,7 +19,6 @@ namespace WinFormsApp1
             // Initialize basic information
             humanPlayer = Player.X;
             computerPlayer = Player.O;
-            randomSelection = new Random();
             buttons = new List<Button> { btnTile1, btnTile2, btnTile3, btnTile4, btnTile5, btnTile6, btnTile7, btnTile8, btnTile9 };
             
             // Create game logic
@@ -69,29 +68,6 @@ namespace WinFormsApp1
         }
 
         /// <summary>
-        /// Version of a stupid AI
-        /// </summary>
-        private void ComputerSelectionStupid()
-        {
-            var selectedTile = new Button();
-
-            // If selection already contains an disabled button with the players choice, than a new tile is being searched for
-            do
-            {
-                var selection = randomSelection.Next(buttons.Count);
-                selectedTile = buttons[selection];
-            }
-            while (selectedTile.Text != string.Empty && buttons.Any(x => x.Enabled == true));
-
-            if (selectedTile.Text.Equals(string.Empty))
-            {
-                selectedTile.Text = Player.O.ToString();
-                selectedTile.Enabled = false;
-                selectedTile.BackColor = Color.PaleVioletRed;
-            }
-        }
-
-        /// <summary>
         /// Enables the CPU to make a move
         /// </summary>
         private void StartComputer()
@@ -108,82 +84,82 @@ namespace WinFormsApp1
             computerTimer.Enabled = false;
         }
 
-        /// <summary>
-        /// Adds the score to the designated player
-        /// </summary>
-        /// <param name="player">the player who has won</param>
-        private void AddScore(Player player)
-        {
-            switch (player)
-            {
-                case Player.X:
-                    playerScore++;
-                    lblPlayer.Text = StringConstants.PLAYER_SCORE_BOARD + playerScore.ToString();
-                    break;
-                case Player.O:
-                    computerScore++;
-                    lblComputer.Text = StringConstants.COMPUTER_SCORE_BOARD + computerScore.ToString();
-                    break;
-            }
-        }
+        ///// <summary>
+        ///// Adds the score to the designated player
+        ///// </summary>
+        ///// <param name="player">the player who has won</param>
+        //private void AddScore(Player player)
+        //{
+        //    switch (player)
+        //    {
+        //        case Player.X:
+        //            playerScore++;
+        //            lblPlayer.Text = StringConstants.PLAYER_SCORE_BOARD + playerScore.ToString();
+        //            break;
+        //        case Player.O:
+        //            computerScore++;
+        //            lblComputer.Text = StringConstants.COMPUTER_SCORE_BOARD + computerScore.ToString();
+        //            break;
+        //    }
+        //}
 
-        /// <summary>
-        /// Checking the tiles and different patterns of the TicTacToe game for who has won
-        /// </summary>
-        private void CheckWinner()
-        {
-            var lines = gameLogic.CheckBoardLines();
-            var playerMoves = new List<int>();
-            var computerMoves = new List<int>();
-            var isMatchPlayer = false;
-            var isMatchCPU = false;
+        ///// <summary>
+        ///// Checking the tiles and different patterns of the TicTacToe game for who has won
+        ///// </summary>
+        //private void CheckWinner()
+        //{
+        //    var lines = gameLogic.CheckBoardLines();
+        //    var playerMoves = new List<int>();
+        //    var computerMoves = new List<int>();
+        //    var isMatchPlayer = false;
+        //    var isMatchCPU = false;
 
-            foreach(var tile in tiles)
-            {
-                if(tile.Key.Text == StringConstants.PLAYER_ICON)
-                {
-                    playerMoves.Add(tile.Value);
-                }
+        //    foreach(var tile in tiles)
+        //    {
+        //        if(tile.Key.Text == StringConstants.PLAYER_ICON)
+        //        {
+        //            playerMoves.Add(tile.Value);
+        //        }
 
-                if(tile.Key.Text == StringConstants.COMPUTER_ICON)
-                {
-                    computerMoves.Add(tile.Value);
-                }
-            }
+        //        if(tile.Key.Text == StringConstants.COMPUTER_ICON)
+        //        {
+        //            computerMoves.Add(tile.Value);
+        //        }
+        //    }
 
-            foreach(var boardLine in lines)
-            {
-                foreach (var line in boardLine)
-                {
-                    // Comparing the moves against the board lines
-                    isMatchPlayer = line.All(x => playerMoves.Any(y => y == x));
-                    isMatchCPU = line.All(x => computerMoves.Any(y => y == x));
+        //    foreach(var boardLine in lines)
+        //    {
+        //        foreach (var line in boardLine)
+        //        {
+        //            // Comparing the moves against the board lines
+        //            isMatchPlayer = line.All(x => playerMoves.Any(y => y == x));
+        //            isMatchCPU = line.All(x => computerMoves.Any(y => y == x));
 
-                    if (isMatchPlayer)
-                    {
-                        MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
-                        AddScore(humanPlayer);
-                        NextGame();
+        //            if (isMatchPlayer)
+        //            {
+        //                MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
+        //                AddScore(humanPlayer);
+        //                NextGame();
 
-                        break;
-                    }
-                    else if (isMatchCPU)
-                    {
-                        MessageBox.Show(StringConstants.COMPUTER_WINS_MESSAGE);
-                        AddScore(computerPlayer);
-                        NextGame();
+        //                break;
+        //            }
+        //            else if (isMatchCPU)
+        //            {
+        //                MessageBox.Show(StringConstants.COMPUTER_WINS_MESSAGE);
+        //                AddScore(computerPlayer);
+        //                NextGame();
 
-                        break;
-                    }
+        //                break;
+        //            }
 
-                    if (buttons.All(x => x.Text != string.Empty))
-                    {
-                        MessageBox.Show(StringConstants.THE_MATCH_IS_A_TIE);
-                        NextGame();
-                    }
-                }
-            }
-        }
+        //            if (buttons.All(x => x.Text != string.Empty))
+        //            {
+        //                MessageBox.Show(StringConstants.THE_MATCH_IS_A_TIE);
+        //                NextGame();
+        //            }
+        //        }
+        //    }
+        //}
 
         // Events
         private void btnRestart_Click(object sender, EventArgs e)
@@ -201,9 +177,13 @@ namespace WinFormsApp1
 
         private void computerTimer_Tick(object sender, EventArgs e)
         {
-            ComputerSelectionStupid();
+            var selection = (Button)sender;
+            gameLogic.ComputerSelectionStupid(selection, buttons);
             StopComputer();
-            CheckWinner();
+            gameLogic.CheckWinner();
+
+            // If there is a winner, add the score to the correct winner
+            
         }
     }
 }

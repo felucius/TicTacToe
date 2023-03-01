@@ -1,4 +1,4 @@
-﻿namespace WinFormsApp1
+﻿namespace TicTacToe
 {
     partial class PlayGround
     {

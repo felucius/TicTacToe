@@ -1,4 +1,4 @@
-﻿namespace TicTacToe
+﻿namespace TicTacToe.Models.Extensions
 {
     public static class StringConstants
     {
