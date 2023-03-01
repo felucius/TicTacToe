@@ -112,17 +112,20 @@ namespace TicTacToe
             switch (isWinner)
             {
                 case GameAnnouncements.PLAYER_WINS:
-                    MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
+                     MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
                     gameLogic.AddPlayerScore(player);
                     lblPlayer.Text = StringConstants.PLAYER_SCORE_BOARD + player.GetScore().ToString();
+                    NextGame();
                     break;
                 case GameAnnouncements.CPU_WINS:
                     MessageBox.Show(StringConstants.COMPUTER_WINS_MESSAGE);
                     gameLogic.AddCpuScore(cpuPlayer);
                     lblComputer.Text = StringConstants.COMPUTER_SCORE_BOARD + cpuPlayer.GetScore().ToString();
+                    NextGame();
                     break;
                 case GameAnnouncements.TIE:
                     MessageBox.Show(StringConstants.THE_MATCH_IS_A_TIE);
+                    NextGame();
                     break;
             }
         }

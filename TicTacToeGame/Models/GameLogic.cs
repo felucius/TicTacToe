@@ -74,7 +74,8 @@ namespace TicTacToe.Models
         public void AddPlayerScore(Player player)
         {
             var currentScore = player.GetScore();
-            player.SetScore(currentScore++);
+            currentScore += 1;
+            player.SetScore(currentScore);
         }
 
         /// <summary>
@@ -84,7 +85,8 @@ namespace TicTacToe.Models
         public void AddCpuScore(Cpu cpuPlayer)
         {
             var currentScore = cpuPlayer.GetScore();
-            cpuPlayer.SetScore(currentScore++);
+            currentScore += 1;
+            cpuPlayer.SetScore(currentScore);
         }
 
         /// <summary>
