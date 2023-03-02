@@ -90,19 +90,6 @@ namespace TicTacToe.Models
         }
 
         /// <summary>
-        /// Clears the board and start a new game
-        /// </summary>
-        private void NextGame(List<Button> board)
-        {
-            foreach (var tile in board)
-            {
-                tile.Enabled = true;
-                tile.Text = string.Empty;
-                tile.BackColor = Color.White;
-            }
-        }
-
-        /// <summary>
         /// Checking the tiles and different patterns of the TicTacToe game for who has won
         /// </summary>
         public GameAnnouncements CheckWinner(List<KeyValuePair<Button, int>> tiles)
@@ -156,7 +143,7 @@ namespace TicTacToe.Models
         /// <summary>
         /// Version of a stupid AI
         /// </summary>
-        public void ComputerSelectionStupid(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        public void ComputerSelectionEasy(Button selectedTile, List<Button> board, Cpu cpuPlayer)
         {
             // If selection already contains an disabled button with the players choice, than a new tile is being searched for
             do
@@ -172,6 +159,16 @@ namespace TicTacToe.Models
                 selectedTile.Enabled = false;
                 selectedTile.BackColor = Color.PaleVioletRed;
             }
+        }
+
+        public void ComputerSelectionIntermediate(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        {
+            // To be implemented
+        }
+
+        public void ComputerSelectionHard(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        {
+            // To be implemented
         }
     }
 }

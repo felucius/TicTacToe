@@ -20,6 +20,7 @@ namespace TicTacToe
             lblTitle.Text = "Tic Tac Toe";
             lblPlayerName.Text = "Player name";
             lblDifficulty.Text = "Choose difficulty";
+            btnStartGame.Text = "Start game";
         }
 
         private void LoadGameDifficulties()
