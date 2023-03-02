@@ -1,6 +1,6 @@
 ﻿namespace TicTacToe.Models
 {
-    public enum Difficulty
+    public enum DifficultyEnum
     {
         EASY,
         INTERMEDIATE,

@@ -1,4 +1,3 @@
-using System.Numerics;
 using TicTacToe.Models;
 using TicTacToe.Models.Extensions;
 
@@ -12,13 +11,20 @@ namespace TicTacToe
         private readonly Cpu cpuPlayer;
         private readonly Player player;
 
-        public PlayGround()
+        public PlayGround(string playerName, DifficultyEnum difficulty)
         {
             InitializeComponent();
 
             // Initialize players
-            cpuPlayer = new Cpu();
-            player = new Player();
+            cpuPlayer = new Cpu
+            {
+                Difficulty = difficulty
+            };
+
+            player = new Player
+            {
+                Name = playerName,
+            };
 
             boardGame = new List<Button> { btnTile1, btnTile2, btnTile3, btnTile4, btnTile5, btnTile6, btnTile7, btnTile8, btnTile9 };
             
@@ -37,7 +43,7 @@ namespace TicTacToe
             cpuPlayer.SetScore(0);
             player.SetScore(0);
 
-            lblPlayer.Text = StringConstants.PLAYER_SCORE_BOARD + player.GetScore();
+            lblPlayer.Text = player.GetName() + StringConstants.PLAYER_SCORE_BOARD + player.GetScore();
             lblComputer.Text = StringConstants.COMPUTER_SCORE_BOARD + cpuPlayer.GetScore();
 
             foreach (var button in boardGame)
@@ -114,7 +120,7 @@ namespace TicTacToe
                 case GameAnnouncements.PLAYER_WINS:
                      MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
                     gameLogic.AddPlayerScore(player);
-                    lblPlayer.Text = StringConstants.PLAYER_SCORE_BOARD + player.GetScore().ToString();
+                    lblPlayer.Text = player.GetName() + StringConstants.PLAYER_SCORE_BOARD + player.GetScore().ToString();
                     NextGame();
                     break;
                 case GameAnnouncements.CPU_WINS:
