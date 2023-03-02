@@ -37,8 +37,11 @@ namespace TicTacToe
 
         private void SetDifficulty()
         {
-            var difficulty = (DifficultyEnum) cbDifficulty.SelectedItem;
-            Difficulty = difficulty;
+            if(cbDifficulty.SelectedItem != null)
+            {
+                var difficulty = (DifficultyEnum) cbDifficulty.SelectedItem;
+                Difficulty = difficulty;
+            }
         }
         private void btnStartGame_Click(object sender, EventArgs e)
         {
