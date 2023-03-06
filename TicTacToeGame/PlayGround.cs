@@ -141,7 +141,7 @@ namespace TicTacToe
             switch (isWinner)
             {
                 case GameAnnouncements.PLAYER_WINS:
-                        MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
+                    MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
                     gameLogic.AddPlayerScore(player);
                     lblPlayer.Text = player.GetName() + StringConstants.PLAYER_SCORE_BOARD + player.GetScore().ToString();
                     NextGame();

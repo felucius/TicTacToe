@@ -7,12 +7,13 @@ namespace TicTacToe.Models
     {
         private readonly Random randomSelection;
         readonly List<KeyValuePair<Button, int>> board;
+        private bool firstMoveMade;
 
         public GameLogic()
         {
             board = new List<KeyValuePair<Button, int>>();
             randomSelection = new Random();
-
+            firstMoveMade = false;
         }
 
         /// <summary>
@@ -141,8 +142,11 @@ namespace TicTacToe.Models
         }
 
         /// <summary>
-        /// Version of a stupid AI
+        /// Simplified AI version where the CPU is only looking for empty squares to put its selection on.
         /// </summary>
+        /// <param name="selectedTile">The selected tile by the CPI</param>
+        /// <param name="board">The board where the tiles are placed</param>
+        /// <param name="cpuPlayer">The CPU player that makes a selection</param>
         public void ComputerSelectionEasy(Button selectedTile, List<Button> board, Cpu cpuPlayer)
         {
             // If selection already contains an disabled button with the players choice, than a new tile is being searched for
@@ -153,6 +157,89 @@ namespace TicTacToe.Models
             }
             while (selectedTile.Text != string.Empty && board.Any(x => x.Enabled == true));
 
+            FillInSelectedTile(selectedTile, cpuPlayer);
+        }
+
+        /// <summary>
+        /// Improved AI where the CPU is going for better strategic.
+        /// </summary>
+        /// <param name="selectedTile">The selected tile by the CPI</param>
+        /// <param name="board">The board where the tiles are placed</param>
+        /// <param name="cpuPlayer">The CPU player that makes a selection</param>
+        public void ComputerSelectionIntermediate(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        {
+            var cornerTiles = new List<int>()
+            {
+                0, 2, 6, 8
+            };
+
+            do
+            {
+                var selection = randomSelection.Next(board.Count);
+
+                // Check the corners first. Did the player select the first tile in one of the corners? CPU follows up on that
+                if (board.Count(x=>x.Text == "X") == 1)
+                {
+                    do
+                    {
+                        selection = randomSelection.Next(board.Count);
+
+                        // Check if selection falls within corners of the board
+                        if (selection == 0 || selection == 2 || selection == 6 || selection == 8)
+                        {
+                            selectedTile = board[selection];
+                        }
+                    }
+                    while (!cornerTiles.Any(x => selection == x));
+
+                }
+                else
+                {
+                    foreach (var tile in board)
+                    {
+                        // Check if board tiles was not set by CPU
+                        if (tile.Text != cpuPlayer.GetUserIcon() && tile.Text != string.Empty)
+                        {
+                            // Check on horizontal lines
+                            selectedTile = CheckHorizontalLines(selectedTile, board);
+
+                            // Check on vertical lines
+                            selectedTile = CheckVerticalLines(selectedTile, board);
+
+                            // Check on cross lines
+                            selectedTile = CheckCrossLines(selectedTile, board);
+                        }
+                    }
+                }
+
+                // Check on cross lines
+            }
+            while (selectedTile.Text != string.Empty && board.Any(x => x.Enabled == true));
+
+            FillInSelectedTile(selectedTile, cpuPlayer);
+            firstMoveMade = true;
+        }
+
+        /// <summary>
+        /// Better AI version where the CPU is trying to block the users choice.
+        /// </summary>
+        /// <param name="selectedTile">The selected tile by the CPI</param>
+        /// <param name="board">The board where the tiles are placed</param>
+        /// <param name="cpuPlayer">The CPU player that makes a selection</param>
+        public void ComputerSelectionHard(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        {
+            // Check the corners first. Did the player put on of theirs in the corner? CPU blocks the player and put its selection in the middle
+
+
+        }
+
+        /// <summary>
+        /// Fills in the selected tile on the board.
+        /// </summary>
+        /// <param name="selectedTile">The selected tile from the CPU</param>
+        /// <param name="cpuPlayer">The player</param>
+        private void FillInSelectedTile(Button selectedTile, Cpu cpuPlayer)
+        {
             if (selectedTile.Text.Equals(string.Empty))
             {
                 selectedTile.Text = cpuPlayer.GetUserIcon();
@@ -161,14 +248,147 @@ namespace TicTacToe.Models
             }
         }
 
-        public void ComputerSelectionIntermediate(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        private Button CheckHorizontalLines(Button selectedTile, List<Button> board)
         {
-            // To be implemented
+            // First row
+            if (board[0].Text == "X" && board[1].Text == "X")
+            {
+                selectedTile = board[2];
+            }
+
+            if (board[1].Text == "X" && board[2].Text == "X")
+            {
+                selectedTile = board[0];
+            }
+
+            if (board[0].Text == "X" && board[2].Text == "X")
+            {
+                selectedTile = board[1];
+            }
+
+            // Second row
+            if (board[3].Text == "X" && board[4].Text == "X")
+            {
+                selectedTile = board[5];
+            }
+
+            if (board[4].Text == "X" && board[5].Text == "X")
+            {
+                selectedTile = board[3];
+            }
+
+            if (board[3].Text == "X" && board[5].Text == "X")
+            {
+                selectedTile = board[4];
+            }
+
+            // Third row
+            if (board[6].Text == "X" && board[7].Text == "X")
+            {
+                selectedTile = board[8];
+            }
+
+            if (board[7].Text == "X" && board[8].Text == "X")
+            {
+                selectedTile = board[6];
+            }
+
+            if (board[6].Text == "X" && board[8].Text == "X")
+            {
+                selectedTile = board[7];
+            }
+
+            return selectedTile;
         }
 
-        public void ComputerSelectionHard(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        private Button CheckVerticalLines(Button selectedTile, List<Button> board)
         {
-            // To be implemented
+            // First row
+            if (board[0].Text == "X" && board[3].Text == "X")
+            {
+                selectedTile = board[6];
+            }
+
+            if (board[3].Text == "X" && board[6].Text == "X")
+            {
+                selectedTile = board[0];
+            }
+
+            if (board[0].Text == "X" && board[6].Text == "X")
+            {
+                selectedTile = board[3];
+            }
+
+            // Second row
+            if (board[1].Text == "X" && board[4].Text == "X")
+            {
+                selectedTile = board[7];
+            }
+
+            if (board[4].Text == "X" && board[7].Text == "X")
+            {
+                selectedTile = board[1];
+            }
+
+            if (board[1].Text == "X" && board[7].Text == "X")
+            {
+                selectedTile = board[4];
+            }
+
+            // Third row
+            if (board[2].Text == "X" && board[5].Text == "X")
+            {
+                selectedTile = board[8];
+            }
+
+            if (board[5].Text == "X" && board[8].Text == "X")
+            {
+                selectedTile = board[2];
+            }
+
+            if (board[2].Text == "X" && board[8].Text == "X")
+            {
+                selectedTile = board[5];
+            }
+
+            return selectedTile;
+        }
+
+        private Button CheckCrossLines(Button selectedTile, List<Button> board)
+        {
+            // First cross
+            if (board[0].Text == "X" && board[4].Text == "X")
+            {
+                selectedTile = board[8];
+            }
+
+            if (board[4].Text == "X" && board[8].Text == "X")
+            {
+                selectedTile = board[0];
+            }
+
+            if (board[0].Text == "X" && board[8].Text == "X")
+            {
+                selectedTile = board[4];
+            }
+
+            // Second cross
+            if (board[2].Text == "X" && board[4].Text == "X")
+            {
+                selectedTile = board[6];
+            }
+
+            if (board[4].Text == "X" && board[6].Text == "X")
+            {
+                selectedTile = board[2];
+            }
+
+            if (board[2].Text == "X" && board[6].Text == "X")
+            {
+                selectedTile = board[4];
+            }
+
+            return selectedTile;
         }
     }
 }
