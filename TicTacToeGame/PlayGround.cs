@@ -1,4 +1,3 @@
-using System.Numerics;
 using TicTacToe.Models;
 using TicTacToe.Models.Extensions;
 
@@ -9,24 +8,36 @@ namespace TicTacToe
         private List<Button> boardGame;
         private GameLogic gameLogic;
         private readonly List<KeyValuePair<Button, int>> tiles;
-        private readonly Cpu cpuPlayer;
-        private readonly Player player;
+        private Cpu cpuPlayer;
+        private Player player;
 
-        public PlayGround()
+        public PlayGround(string playerName, DifficultyEnum difficulty)
         {
             InitializeComponent();
+            InitializePlayers(playerName, difficulty);
 
-            // Initialize players
-            cpuPlayer = new Cpu();
-            player = new Player();
 
-            boardGame = new List<Button> { btnTile1, btnTile2, btnTile3, btnTile4, btnTile5, btnTile6, btnTile7, btnTile8, btnTile9 };
-            
             // Create game logic
+            boardGame = new List<Button> { btnTile1, btnTile2, btnTile3, btnTile4, btnTile5, btnTile6, btnTile7, btnTile8, btnTile9 };
             gameLogic = new GameLogic();
             tiles = gameLogic.CreateBoard(boardGame);
 
             RestartGame();
+            //CreateGameDifficulty(cpuPlayer.Difficulty);
+        }
+
+        private void InitializePlayers(string playerName, DifficultyEnum difficulty)
+        {
+            // Initialize players
+            cpuPlayer = new Cpu
+            {
+                Difficulty = difficulty
+            };
+
+            player = new Player
+            {
+                Name = playerName,
+            };
         }
 
         /// <summary>
@@ -37,7 +48,7 @@ namespace TicTacToe
             cpuPlayer.SetScore(0);
             player.SetScore(0);
 
-            lblPlayer.Text = StringConstants.PLAYER_SCORE_BOARD + player.GetScore();
+            lblPlayer.Text = player.GetName() + StringConstants.PLAYER_SCORE_BOARD + player.GetScore();
             lblComputer.Text = StringConstants.COMPUTER_SCORE_BOARD + cpuPlayer.GetScore();
 
             foreach (var button in boardGame)
@@ -100,11 +111,29 @@ namespace TicTacToe
             StartComputer();
         }
 
+        public void CpuExecutesMove(DifficultyEnum selectedDifficulty)
+        {
+            var cpuSelection = new Button();
+
+            switch (selectedDifficulty)
+            {
+                case DifficultyEnum.EASY:
+                    gameLogic.ComputerSelectionEasy(cpuSelection, boardGame, cpuPlayer);
+                    break;
+
+                case DifficultyEnum.INTERMEDIATE:
+                    gameLogic.ComputerSelectionIntermediate(cpuSelection, boardGame, cpuPlayer);
+                    break;
+
+                case DifficultyEnum.HARD:
+                    gameLogic.ComputerSelectionHard(cpuSelection, boardGame, cpuPlayer);
+                    break;
+            }
+        }
+
         private void computerTimer_Tick(object sender, EventArgs e)
         {
-            //var selection = (Button)sender;
-            var selection = new Button();
-            gameLogic.ComputerSelectionStupid(selection, boardGame, cpuPlayer);
+            CpuExecutesMove(cpuPlayer.Difficulty);
             StopComputer();
             var isWinner = gameLogic.CheckWinner(tiles);
 
@@ -112,9 +141,9 @@ namespace TicTacToe
             switch (isWinner)
             {
                 case GameAnnouncements.PLAYER_WINS:
-                     MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
+                    MessageBox.Show(StringConstants.PLAYER_WINS_MESSAGE);
                     gameLogic.AddPlayerScore(player);
-                    lblPlayer.Text = StringConstants.PLAYER_SCORE_BOARD + player.GetScore().ToString();
+                    lblPlayer.Text = player.GetName() + StringConstants.PLAYER_SCORE_BOARD + player.GetScore().ToString();
                     NextGame();
                     break;
                 case GameAnnouncements.CPU_WINS:

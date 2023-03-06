@@ -7,14 +7,12 @@ namespace TicTacToe.Models
         public string Name { get; set; }
         public int Score { get; set; }
         public string UserIcon { get; set; }
-        public GameAnnouncements User { get; set; }
 
         public Player()
         {
             Name = "Player";
             Score = 0;
             UserIcon = "X";
-            User = GameAnnouncements.PLAYER_WINS;
         }
 
         public string GetName()

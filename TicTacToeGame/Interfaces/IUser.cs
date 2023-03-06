@@ -9,8 +9,6 @@ namespace TicTacToe.Interfaces
         public int Score { get; set; }
         public string UserIcon { get; set; }
 
-        public GameAnnouncements User { get; set; }
-
         public string GetName();
 
         public int GetScore();
