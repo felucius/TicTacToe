@@ -9,5 +9,7 @@
         public static string PLAYER_ICON = "X";
         public static string COMPUTER_ICON = "O";
         public static string THE_MATCH_IS_A_TIE = "IT IS A TIE. NO WINNERS. ON TO THE NEXT ROUND";
+        public static string TILE_IS_MATCH = "MATCH";
+        public static string TILE_IS_NOT_A_MATCH = "NO MATCH";
     }
 }

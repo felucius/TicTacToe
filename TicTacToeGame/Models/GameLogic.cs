@@ -7,13 +7,13 @@ namespace TicTacToe.Models
     {
         private readonly Random randomSelection;
         readonly List<KeyValuePair<Button, int>> board;
-        private bool firstMoveMade;
+        private KeyValuePair<Button, bool> tileIsMatched;
 
         public GameLogic()
         {
             board = new List<KeyValuePair<Button, int>>();
+            tileIsMatched = new KeyValuePair<Button, bool>();
             randomSelection = new Random();
-            firstMoveMade = false;
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace TicTacToe.Models
         /// <param name="selectedTile">The selected tile by the CPI</param>
         /// <param name="board">The board where the tiles are placed</param>
         /// <param name="cpuPlayer">The CPU player that makes a selection</param>
-        public void ComputerSelectionIntermediate(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        public void ComputerSelectionIntermediate(Button selectedTile, List<Button> board, Cpu cpuPlayer, Player player)
         {
             var cornerTiles = new List<int>()
             {
@@ -175,10 +175,11 @@ namespace TicTacToe.Models
 
             do
             {
+                var tempSelectedTile = selectedTile;
                 var selection = randomSelection.Next(board.Count);
 
                 // Check the corners first. Did the player select the first tile in one of the corners? CPU follows up on that
-                if (board.Count(x=>x.Text == "X") == 1)
+                if (board.Count(x=>x.Text == player.GetUserIcon()) == 1)
                 {
                     do
                     {
@@ -191,7 +192,6 @@ namespace TicTacToe.Models
                         }
                     }
                     while (!cornerTiles.Any(x => selection == x));
-
                 }
                 else
                 {
@@ -201,23 +201,28 @@ namespace TicTacToe.Models
                         if (tile.Text != cpuPlayer.GetUserIcon() && tile.Text != string.Empty)
                         {
                             // Check on horizontal lines
-                            selectedTile = CheckHorizontalLines(selectedTile, board);
+                            tileIsMatched = CheckHorizontalLines(selectedTile, board, player.GetUserIcon());
 
                             // Check on vertical lines
-                            selectedTile = CheckVerticalLines(selectedTile, board);
+                            tileIsMatched = CheckVerticalLines(selectedTile, board, player.GetUserIcon());
 
                             // Check on cross lines
-                            selectedTile = CheckCrossLines(selectedTile, board);
+                            tileIsMatched = CheckCrossLines(selectedTile, board, player.GetUserIcon());
                         }
                     }
                 }
 
-                // Check on cross lines
+                //if(selectedTile.Text == StringConstants.TILE_IS_NOT_A_MATCH)
+                if(!tileIsMatched.Value)
+                {
+                    selection = randomSelection.Next(board.Count);
+                    selectedTile = board[selection];
+                }
+
             }
-            while (selectedTile.Text != string.Empty && board.Any(x => x.Enabled == true));
+            while (tileIsMatched.Key.Text != string.Empty && board.Any(x => x.Enabled == true));
 
             FillInSelectedTile(selectedTile, cpuPlayer);
-            firstMoveMade = true;
         }
 
         /// <summary>
@@ -248,147 +253,211 @@ namespace TicTacToe.Models
             }
         }
 
-        private Button CheckHorizontalLines(Button selectedTile, List<Button> board)
+        private KeyValuePair<Button, bool> CheckHorizontalLines(Button selectedTile, List<Button> board, string playerIcon)
         {
             // First row
-            if (board[0].Text == "X" && board[1].Text == "X")
+            if (board[0].Text == playerIcon && board[1].Text == playerIcon)
             {
                 selectedTile = board[2];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[1].Text == "X" && board[2].Text == "X")
+            if (board[1].Text == playerIcon && board[2].Text == playerIcon)
             {
                 selectedTile = board[0];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[0].Text == "X" && board[2].Text == "X")
+            if (board[0].Text == playerIcon && board[2].Text == playerIcon)
             {
                 selectedTile = board[1];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
             // Second row
-            if (board[3].Text == "X" && board[4].Text == "X")
+            if (board[3].Text == playerIcon && board[4].Text == playerIcon)
             {
                 selectedTile = board[5];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[4].Text == "X" && board[5].Text == "X")
+            if (board[4].Text == playerIcon && board[5].Text == playerIcon)
             {
                 selectedTile = board[3];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[3].Text == "X" && board[5].Text == "X")
+            if (board[3].Text == playerIcon && board[5].Text == playerIcon)
             {
                 selectedTile = board[4];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
             // Third row
-            if (board[6].Text == "X" && board[7].Text == "X")
+            if (board[6].Text == playerIcon && board[7].Text == playerIcon)
             {
                 selectedTile = board[8];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[7].Text == "X" && board[8].Text == "X")
+            if (board[7].Text == playerIcon && board[8].Text == playerIcon)
             {
                 selectedTile = board[6];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[6].Text == "X" && board[8].Text == "X")
+            if (board[6].Text == playerIcon && board[8].Text == playerIcon)
             {
                 selectedTile = board[7];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            return selectedTile;
+            tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
+            //selectedTile.Text = selectedTile.Text == StringConstants.TILE_IS_MATCH ? StringConstants.TILE_IS_MATCH : StringConstants.TILE_IS_NOT_A_MATCH;
+            return tileIsMatched;
         }
 
-        private Button CheckVerticalLines(Button selectedTile, List<Button> board)
+        private KeyValuePair<Button, bool> CheckVerticalLines(Button selectedTile, List<Button> board, string playerIcon)
         {
             // First row
-            if (board[0].Text == "X" && board[3].Text == "X")
+            if (board[0].Text == playerIcon && board[3].Text == playerIcon)
             {
                 selectedTile = board[6];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[3].Text == "X" && board[6].Text == "X")
+            if (board[3].Text == playerIcon && board[6].Text == playerIcon)
             {
                 selectedTile = board[0];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[0].Text == "X" && board[6].Text == "X")
+            if (board[0].Text == playerIcon && board[6].Text == playerIcon)
             {
                 selectedTile = board[3];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
             // Second row
-            if (board[1].Text == "X" && board[4].Text == "X")
+            if (board[1].Text == playerIcon && board[4].Text == playerIcon)
             {
                 selectedTile = board[7];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[4].Text == "X" && board[7].Text == "X")
+            if (board[4].Text == playerIcon && board[7].Text == playerIcon)
             {
                 selectedTile = board[1];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[1].Text == "X" && board[7].Text == "X")
+            if (board[1].Text == playerIcon && board[7].Text == playerIcon)
             {
                 selectedTile = board[4];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
             // Third row
-            if (board[2].Text == "X" && board[5].Text == "X")
+            if (board[2].Text == playerIcon && board[5].Text == playerIcon)
             {
                 selectedTile = board[8];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[5].Text == "X" && board[8].Text == "X")
+            if (board[5].Text == playerIcon && board[8].Text == playerIcon)
             {
                 selectedTile = board[2];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[2].Text == "X" && board[8].Text == "X")
+            if (board[2].Text == playerIcon && board[8].Text == playerIcon)
             {
                 selectedTile = board[5];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
+            
+            tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
 
-            return selectedTile;
+            //selectedTile.Text = selectedTile.Text == StringConstants.TILE_IS_MATCH ? StringConstants.TILE_IS_MATCH : StringConstants.TILE_IS_NOT_A_MATCH;
+            return tileIsMatched;
         }
 
-        private Button CheckCrossLines(Button selectedTile, List<Button> board)
+        private KeyValuePair<Button, bool> CheckCrossLines(Button selectedTile, List<Button> board, string playerIcon)
         {
             // First cross
-            if (board[0].Text == "X" && board[4].Text == "X")
+            if (board[0].Text == playerIcon && board[4].Text == playerIcon)
             {
                 selectedTile = board[8];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[4].Text == "X" && board[8].Text == "X")
+            if (board[4].Text == playerIcon && board[8].Text == playerIcon)
             {
                 selectedTile = board[0];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[0].Text == "X" && board[8].Text == "X")
+            if (board[0].Text == playerIcon && board[8].Text == playerIcon)
             {
                 selectedTile = board[4];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
             // Second cross
-            if (board[2].Text == "X" && board[4].Text == "X")
+            if (board[2].Text == playerIcon && board[4].Text == playerIcon)
             {
                 selectedTile = board[6];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[4].Text == "X" && board[6].Text == "X")
+            if (board[4].Text == playerIcon && board[6].Text == playerIcon)
             {
                 selectedTile = board[2];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            if (board[2].Text == "X" && board[6].Text == "X")
+            if (board[2].Text == playerIcon && board[6].Text == playerIcon)
             {
                 selectedTile = board[4];
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
             }
 
-            return selectedTile;
+            tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
+
+            //selectedTile.Text = selectedTile.Text == StringConstants.TILE_IS_MATCH ? StringConstants.TILE_IS_MATCH : StringConstants.TILE_IS_NOT_A_MATCH;
+            return tileIsMatched;
         }
     }
 }
