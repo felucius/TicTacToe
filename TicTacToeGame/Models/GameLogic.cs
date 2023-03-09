@@ -8,6 +8,7 @@ namespace TicTacToe.Models
         private readonly Random randomSelection;
         readonly List<KeyValuePair<Button, int>> board;
         private KeyValuePair<Button, bool> tileIsMatched;
+        private bool tileMatched = false;
 
         public GameLogic()
         {
@@ -175,11 +176,10 @@ namespace TicTacToe.Models
 
             do
             {
-                var tempSelectedTile = selectedTile;
                 var selection = randomSelection.Next(board.Count);
 
                 // Check the corners first. Did the player select the first tile in one of the corners? CPU follows up on that
-                if (board.Count(x=>x.Text == player.GetUserIcon()) == 1)
+                if (board.Count(x => x.Text == player.GetUserIcon()) == 1)
                 {
                     do
                     {
@@ -195,34 +195,30 @@ namespace TicTacToe.Models
                 }
                 else
                 {
-                    foreach (var tile in board)
-                    {
-                        // Check if board tiles was not set by CPU
-                        if (tile.Text != cpuPlayer.GetUserIcon() && tile.Text != string.Empty)
-                        {
-                            // Check on horizontal lines
-                            tileIsMatched = CheckHorizontalLines(selectedTile, board, player.GetUserIcon());
+                    // Check on horizontal lines
+                    tileIsMatched = CheckHorizontalLines(selectedTile, board, player.GetUserIcon());
 
-                            // Check on vertical lines
-                            tileIsMatched = CheckVerticalLines(selectedTile, board, player.GetUserIcon());
+                    // Check on vertical lines
+                    tileIsMatched = CheckVerticalLines(selectedTile, board, player.GetUserIcon());
 
-                            // Check on cross lines
-                            tileIsMatched = CheckCrossLines(selectedTile, board, player.GetUserIcon());
-                        }
-                    }
+                    // Check on cross lines
+                    tileIsMatched = CheckCrossLines(selectedTile, board, player.GetUserIcon());
+
+                    selectedTile = tileIsMatched.Key;
                 }
 
-                //if(selectedTile.Text == StringConstants.TILE_IS_NOT_A_MATCH)
-                if(!tileIsMatched.Value)
+                if (!tileIsMatched.Value && board.Count(x => x.Text == player.GetUserIcon()) >= 2)
                 {
                     selection = randomSelection.Next(board.Count);
                     selectedTile = board[selection];
                 }
 
             }
-            while (tileIsMatched.Key.Text != string.Empty && board.Any(x => x.Enabled == true));
+            while (selectedTile.Text != string.Empty && board.Any(x => x.Enabled == true));
 
             FillInSelectedTile(selectedTile, cpuPlayer);
+            //return selectedTile;
+            //return selectedTile;
         }
 
         /// <summary>
@@ -253,84 +249,70 @@ namespace TicTacToe.Models
             }
         }
 
+        private KeyValuePair<Button, bool> SelectEmptyBoardTile(List<Button> board, int index)
+        {
+            var selectedTile = board[index];
+            if (selectedTile.Text.Equals(string.Empty))
+            {
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                return tileIsMatched;
+            }
+
+            return new KeyValuePair<Button, bool>();
+        }
+
         private KeyValuePair<Button, bool> CheckHorizontalLines(Button selectedTile, List<Button> board, string playerIcon)
         {
             // First row
             if (board[0].Text == playerIcon && board[1].Text == playerIcon)
             {
-                selectedTile = board[2];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 2);
             }
 
             if (board[1].Text == playerIcon && board[2].Text == playerIcon)
             {
-                selectedTile = board[0];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 0);
             }
 
             if (board[0].Text == playerIcon && board[2].Text == playerIcon)
             {
-                selectedTile = board[1];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 1);
             }
 
             // Second row
             if (board[3].Text == playerIcon && board[4].Text == playerIcon)
             {
-                selectedTile = board[5];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 5);
             }
 
             if (board[4].Text == playerIcon && board[5].Text == playerIcon)
             {
-                selectedTile = board[3];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 3);
             }
 
             if (board[3].Text == playerIcon && board[5].Text == playerIcon)
             {
-                selectedTile = board[4];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 4);
             }
 
             // Third row
             if (board[6].Text == playerIcon && board[7].Text == playerIcon)
             {
-                selectedTile = board[8];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 8);
             }
 
             if (board[7].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[6];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 6);
             }
 
             if (board[6].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[7];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 7);
             }
 
             tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
-            //selectedTile.Text = selectedTile.Text == StringConstants.TILE_IS_MATCH ? StringConstants.TILE_IS_MATCH : StringConstants.TILE_IS_NOT_A_MATCH;
+            
             return tileIsMatched;
         }
 
@@ -339,72 +321,53 @@ namespace TicTacToe.Models
             // First row
             if (board[0].Text == playerIcon && board[3].Text == playerIcon)
             {
-                selectedTile = board[6];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 6);
             }
 
             if (board[3].Text == playerIcon && board[6].Text == playerIcon)
             {
-                selectedTile = board[0];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 0);
             }
 
             if (board[0].Text == playerIcon && board[6].Text == playerIcon)
             {
-                selectedTile = board[3];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 3);
             }
 
             // Second row
             if (board[1].Text == playerIcon && board[4].Text == playerIcon)
             {
-                selectedTile = board[7];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 7);
             }
 
             if (board[4].Text == playerIcon && board[7].Text == playerIcon)
             {
-                selectedTile = board[1];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 1);
             }
 
             if (board[1].Text == playerIcon && board[7].Text == playerIcon)
             {
-                selectedTile = board[4];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 4);
             }
 
             // Third row
             if (board[2].Text == playerIcon && board[5].Text == playerIcon)
             {
-                selectedTile = board[8];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 8);
             }
 
             if (board[5].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[2];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 2);
             }
 
             if (board[2].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[5];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 5);
             }
-            
-            tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
 
-            //selectedTile.Text = selectedTile.Text == StringConstants.TILE_IS_MATCH ? StringConstants.TILE_IS_MATCH : StringConstants.TILE_IS_NOT_A_MATCH;
+            tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
+            
             return tileIsMatched;
         }
 
@@ -413,50 +376,37 @@ namespace TicTacToe.Models
             // First cross
             if (board[0].Text == playerIcon && board[4].Text == playerIcon)
             {
-                selectedTile = board[8];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 8);
             }
 
             if (board[4].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[0];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 0);
             }
 
             if (board[0].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[4];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 4);
             }
 
             // Second cross
             if (board[2].Text == playerIcon && board[4].Text == playerIcon)
             {
-                selectedTile = board[6];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 6);
             }
 
             if (board[4].Text == playerIcon && board[6].Text == playerIcon)
             {
-                selectedTile = board[2];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 2);
             }
 
             if (board[2].Text == playerIcon && board[6].Text == playerIcon)
             {
-                selectedTile = board[4];
-                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
-                //selectedTile.Text = StringConstants.TILE_IS_MATCH;
+                return SelectEmptyBoardTile(board, 4);
             }
 
             tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
 
-            //selectedTile.Text = selectedTile.Text == StringConstants.TILE_IS_MATCH ? StringConstants.TILE_IS_MATCH : StringConstants.TILE_IS_NOT_A_MATCH;
             return tileIsMatched;
         }
     }
