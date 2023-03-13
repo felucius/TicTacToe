@@ -7,13 +7,16 @@ namespace TicTacToe.Models
     {
         private readonly Random randomSelection;
         readonly List<KeyValuePair<Button, int>> board;
+        private KeyValuePair<Button, bool> tileIsMatchedHorizontal, tileIsMatchedVertical, tileIsMatchedCross;
         private KeyValuePair<Button, bool> tileIsMatched;
-        private bool tileMatched = false;
 
         public GameLogic()
         {
             board = new List<KeyValuePair<Button, int>>();
             tileIsMatched = new KeyValuePair<Button, bool>();
+            tileIsMatchedHorizontal = new KeyValuePair<Button, bool>();
+            tileIsMatchedVertical = new KeyValuePair<Button, bool>();
+            tileIsMatchedCross = new KeyValuePair<Button, bool>();
             randomSelection = new Random();
         }
 
@@ -196,15 +199,29 @@ namespace TicTacToe.Models
                 else
                 {
                     // Check on horizontal lines
-                    tileIsMatched = CheckHorizontalLines(selectedTile, board, player.GetUserIcon());
+                    tileIsMatchedHorizontal = CheckHorizontalLines(selectedTile, board, player.GetUserIcon());
 
                     // Check on vertical lines
-                    tileIsMatched = CheckVerticalLines(selectedTile, board, player.GetUserIcon());
+                    tileIsMatchedVertical = CheckVerticalLines(selectedTile, board, player.GetUserIcon());
 
                     // Check on cross lines
-                    tileIsMatched = CheckCrossLines(selectedTile, board, player.GetUserIcon());
+                    tileIsMatchedCross = CheckCrossLines(selectedTile, board, player.GetUserIcon());
 
-                    selectedTile = tileIsMatched.Key;
+                    if (tileIsMatchedHorizontal.Value)
+                    {
+                        selectedTile = tileIsMatchedHorizontal.Key;
+                        break;
+                    }
+                    else if (tileIsMatchedVertical.Value)
+                    {
+                        selectedTile = tileIsMatchedVertical.Key;
+                        break;
+                    }
+                    else if (tileIsMatchedCross.Value)
+                    {
+                        selectedTile = tileIsMatchedCross.Key;
+                        break;
+                    }
                 }
 
                 if (!tileIsMatched.Value && board.Count(x => x.Text == player.GetUserIcon()) >= 2)
@@ -217,8 +234,6 @@ namespace TicTacToe.Models
             while (selectedTile.Text != string.Empty && board.Any(x => x.Enabled == true));
 
             FillInSelectedTile(selectedTile, cpuPlayer);
-            //return selectedTile;
-            //return selectedTile;
         }
 
         /// <summary>
@@ -310,9 +325,8 @@ namespace TicTacToe.Models
             {
                 return SelectEmptyBoardTile(board, 7);
             }
-
-            tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
             
+            tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, false);
             return tileIsMatched;
         }
 
@@ -366,8 +380,7 @@ namespace TicTacToe.Models
                 return SelectEmptyBoardTile(board, 5);
             }
 
-            tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
-            
+            tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, false);
             return tileIsMatched;
         }
 
@@ -405,8 +418,7 @@ namespace TicTacToe.Models
                 return SelectEmptyBoardTile(board, 4);
             }
 
-            tileIsMatched = tileIsMatched.Value == true ? new KeyValuePair<Button, bool>(selectedTile, true) : new KeyValuePair<Button, bool>(selectedTile, false);
-
+            tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, false);
             return tileIsMatched;
         }
     }
