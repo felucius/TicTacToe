@@ -134,12 +134,12 @@ namespace TicTacToe.Models
                     {
                         return GameAnnouncements.CPU_WINS;
                     }
-
-                    if (tiles.All(x => x.Key.Text != string.Empty))
-                    {
-                        return GameAnnouncements.TIE;
-                    }
                 }
+            }
+
+            if (tiles.All(x => x.Key.Text != string.Empty))
+            {
+                return GameAnnouncements.TIE;
             }
 
             return GameAnnouncements.ONGOING;
