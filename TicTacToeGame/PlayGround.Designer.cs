@@ -33,6 +33,7 @@
             this.lblComputer = new System.Windows.Forms.Label();
             this.tabTicTacToe = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lblDifficulty = new System.Windows.Forms.Label();
             this.btnRestart = new System.Windows.Forms.Button();
             this.btnTile9 = new System.Windows.Forms.Button();
             this.btnTile8 = new System.Windows.Forms.Button();
@@ -53,7 +54,7 @@
             // 
             this.lblPlayer.AutoSize = true;
             this.lblPlayer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblPlayer.Location = new System.Drawing.Point(638, 3);
+            this.lblPlayer.Location = new System.Drawing.Point(9, 10);
             this.lblPlayer.Name = "lblPlayer";
             this.lblPlayer.Size = new System.Drawing.Size(70, 28);
             this.lblPlayer.TabIndex = 0;
@@ -63,7 +64,7 @@
             // 
             this.lblComputer.AutoSize = true;
             this.lblComputer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblComputer.Location = new System.Drawing.Point(638, 46);
+            this.lblComputer.Location = new System.Drawing.Point(9, 53);
             this.lblComputer.Name = "lblComputer";
             this.lblComputer.Size = new System.Drawing.Size(70, 28);
             this.lblComputer.TabIndex = 1;
@@ -76,11 +77,12 @@
             this.tabTicTacToe.Location = new System.Drawing.Point(12, 12);
             this.tabTicTacToe.Name = "tabTicTacToe";
             this.tabTicTacToe.SelectedIndex = 0;
-            this.tabTicTacToe.Size = new System.Drawing.Size(879, 549);
+            this.tabTicTacToe.Size = new System.Drawing.Size(657, 790);
             this.tabTicTacToe.TabIndex = 2;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lblDifficulty);
             this.tabPage1.Controls.Add(this.btnRestart);
             this.tabPage1.Controls.Add(this.btnTile9);
             this.tabPage1.Controls.Add(this.btnTile8);
@@ -96,14 +98,24 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(871, 516);
+            this.tabPage1.Size = new System.Drawing.Size(649, 757);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Tic Tac Toe game";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // lblDifficulty
+            // 
+            this.lblDifficulty.AutoSize = true;
+            this.lblDifficulty.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblDifficulty.Location = new System.Drawing.Point(9, 125);
+            this.lblDifficulty.Name = "lblDifficulty";
+            this.lblDifficulty.Size = new System.Drawing.Size(70, 28);
+            this.lblDifficulty.TabIndex = 12;
+            this.lblDifficulty.Text = "label1";
+            // 
             // btnRestart
             // 
-            this.btnRestart.Location = new System.Drawing.Point(648, 440);
+            this.btnRestart.Location = new System.Drawing.Point(9, 690);
             this.btnRestart.Name = "btnRestart";
             this.btnRestart.Size = new System.Drawing.Size(205, 61);
             this.btnRestart.TabIndex = 11;
@@ -114,7 +126,7 @@
             // btnTile9
             // 
             this.btnTile9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile9.Location = new System.Drawing.Point(428, 340);
+            this.btnTile9.Location = new System.Drawing.Point(431, 512);
             this.btnTile9.Name = "btnTile9";
             this.btnTile9.Size = new System.Drawing.Size(205, 161);
             this.btnTile9.TabIndex = 10;
@@ -125,7 +137,7 @@
             // btnTile8
             // 
             this.btnTile8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile8.Location = new System.Drawing.Point(217, 340);
+            this.btnTile8.Location = new System.Drawing.Point(220, 512);
             this.btnTile8.Name = "btnTile8";
             this.btnTile8.Size = new System.Drawing.Size(205, 161);
             this.btnTile8.TabIndex = 9;
@@ -136,7 +148,7 @@
             // btnTile7
             // 
             this.btnTile7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile7.Location = new System.Drawing.Point(6, 340);
+            this.btnTile7.Location = new System.Drawing.Point(9, 512);
             this.btnTile7.Name = "btnTile7";
             this.btnTile7.Size = new System.Drawing.Size(205, 161);
             this.btnTile7.TabIndex = 8;
@@ -147,7 +159,7 @@
             // btnTile6
             // 
             this.btnTile6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile6.Location = new System.Drawing.Point(428, 173);
+            this.btnTile6.Location = new System.Drawing.Point(431, 345);
             this.btnTile6.Name = "btnTile6";
             this.btnTile6.Size = new System.Drawing.Size(205, 161);
             this.btnTile6.TabIndex = 7;
@@ -158,7 +170,7 @@
             // btnTile5
             // 
             this.btnTile5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile5.Location = new System.Drawing.Point(217, 173);
+            this.btnTile5.Location = new System.Drawing.Point(220, 345);
             this.btnTile5.Name = "btnTile5";
             this.btnTile5.Size = new System.Drawing.Size(205, 161);
             this.btnTile5.TabIndex = 6;
@@ -169,7 +181,7 @@
             // btnTile4
             // 
             this.btnTile4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile4.Location = new System.Drawing.Point(6, 173);
+            this.btnTile4.Location = new System.Drawing.Point(9, 345);
             this.btnTile4.Name = "btnTile4";
             this.btnTile4.Size = new System.Drawing.Size(205, 161);
             this.btnTile4.TabIndex = 5;
@@ -180,7 +192,7 @@
             // btnTile3
             // 
             this.btnTile3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile3.Location = new System.Drawing.Point(428, 6);
+            this.btnTile3.Location = new System.Drawing.Point(431, 178);
             this.btnTile3.Name = "btnTile3";
             this.btnTile3.Size = new System.Drawing.Size(205, 161);
             this.btnTile3.TabIndex = 4;
@@ -191,7 +203,7 @@
             // btnTile2
             // 
             this.btnTile2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile2.Location = new System.Drawing.Point(217, 6);
+            this.btnTile2.Location = new System.Drawing.Point(220, 178);
             this.btnTile2.Name = "btnTile2";
             this.btnTile2.Size = new System.Drawing.Size(205, 161);
             this.btnTile2.TabIndex = 3;
@@ -202,7 +214,7 @@
             // btnTile1
             // 
             this.btnTile1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnTile1.Location = new System.Drawing.Point(6, 6);
+            this.btnTile1.Location = new System.Drawing.Point(9, 178);
             this.btnTile1.Name = "btnTile1";
             this.btnTile1.Size = new System.Drawing.Size(205, 161);
             this.btnTile1.TabIndex = 2;
@@ -215,7 +227,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(871, 516);
+            this.tabPage2.Size = new System.Drawing.Size(649, 757);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Upcoming game..";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -228,7 +240,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(903, 578);
+            this.ClientSize = new System.Drawing.Size(682, 814);
             this.Controls.Add(this.tabTicTacToe);
             this.Name = "PlayGround";
             this.Text = "Tic Tac Toe";
@@ -257,5 +269,6 @@
         private Button btnTile4;
         private Button btnRestart;
         private System.Windows.Forms.Timer computerTimer;
+        private Label lblDifficulty;
     }
 }
