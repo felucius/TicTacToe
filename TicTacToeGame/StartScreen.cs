@@ -1,4 +1,5 @@
 ﻿using TicTacToe.Models;
+using TicTacToe.Models.Extensions;
 
 namespace TicTacToe
 {
@@ -27,12 +28,18 @@ namespace TicTacToe
         {
             cbDifficulty.Items.Add(DifficultyEnum.EASY);
             cbDifficulty.Items.Add(DifficultyEnum.INTERMEDIATE);
-            cbDifficulty.Items.Add(DifficultyEnum.HARD);
         }
 
         private void SetPlayerName()
         {
-            PlayerName = tbPlayerName.Text;
+            if (!tbPlayerName.Text.Equals(string.Empty))
+            {
+                PlayerName = tbPlayerName.Text;
+            }
+            else
+            {
+                PlayerName = StringConstants.PLAYER_NAME_DEFAULT;
+            }
         }
 
         private void SetDifficulty()

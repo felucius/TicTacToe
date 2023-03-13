@@ -7,23 +7,27 @@ namespace TicTacToe
     {
         private List<Button> boardGame;
         private GameLogic gameLogic;
-        private readonly List<KeyValuePair<Button, int>> tiles;
+        private List<KeyValuePair<Button, int>> tiles;
         private Cpu cpuPlayer;
         private Player player;
 
         public PlayGround(string playerName, DifficultyEnum difficulty)
         {
             InitializeComponent();
-            InitializePlayers(playerName, difficulty);
-
 
             // Create game logic
-            boardGame = new List<Button> { btnTile1, btnTile2, btnTile3, btnTile4, btnTile5, btnTile6, btnTile7, btnTile8, btnTile9 };
-            gameLogic = new GameLogic();
-            tiles = gameLogic.CreateBoard(boardGame);
+            InitializePlayers(playerName, difficulty);
+            InitializeBoard(difficulty);
 
             RestartGame();
-            //CreateGameDifficulty(cpuPlayer.Difficulty);
+        }
+
+        private void InitializeBoard(DifficultyEnum difficulty)
+        {
+            gameLogic = new GameLogic();
+            lblDifficulty.Text = StringConstants.GAME_DIFFICULTY_STATUS + difficulty.ToString();
+            boardGame = new List<Button> { btnTile1, btnTile2, btnTile3, btnTile4, btnTile5, btnTile6, btnTile7, btnTile8, btnTile9 };
+            tiles = gameLogic.CreateBoard(boardGame);
         }
 
         private void InitializePlayers(string playerName, DifficultyEnum difficulty)
@@ -124,10 +128,6 @@ namespace TicTacToe
                 case DifficultyEnum.INTERMEDIATE:
                     gameLogic.ComputerSelectionIntermediate(cpuSelection, boardGame, cpuPlayer, player);
                     break;
-
-                case DifficultyEnum.HARD:
-                    gameLogic.ComputerSelectionHard(cpuSelection, boardGame, cpuPlayer);
-                    break;
             }
         }
 
@@ -157,6 +157,18 @@ namespace TicTacToe
                     NextGame();
                     break;
             }
+        }
+
+        /// <summary>
+        /// Go to the homescreen when the playground screen is closed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PlayGround_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            var startScreen = new StartScreen();
+            this.Hide();
+            startScreen.Show();
         }
     }
 }

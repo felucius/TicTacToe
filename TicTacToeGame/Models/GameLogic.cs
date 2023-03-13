@@ -7,8 +7,7 @@ namespace TicTacToe.Models
     {
         private readonly Random randomSelection;
         readonly List<KeyValuePair<Button, int>> board;
-        private KeyValuePair<Button, bool> tileIsMatchedHorizontal, tileIsMatchedVertical, tileIsMatchedCross;
-        private KeyValuePair<Button, bool> tileIsMatched;
+        private KeyValuePair<Button, bool> tileIsMatchedHorizontal, tileIsMatchedVertical, tileIsMatchedCross, tileIsMatched;
 
         public GameLogic()
         {
@@ -134,12 +133,12 @@ namespace TicTacToe.Models
                     {
                         return GameAnnouncements.CPU_WINS;
                     }
-
-                    if (tiles.All(x => x.Key.Text != string.Empty))
-                    {
-                        return GameAnnouncements.TIE;
-                    }
                 }
+            }
+
+            if (tiles.All(x => x.Key.Text != string.Empty))
+            {
+                return GameAnnouncements.TIE;
             }
 
             return GameAnnouncements.ONGOING;
@@ -234,19 +233,6 @@ namespace TicTacToe.Models
             while (selectedTile.Text != string.Empty && board.Any(x => x.Enabled == true));
 
             FillInSelectedTile(selectedTile, cpuPlayer);
-        }
-
-        /// <summary>
-        /// Better AI version where the CPU is trying to block the users choice.
-        /// </summary>
-        /// <param name="selectedTile">The selected tile by the CPI</param>
-        /// <param name="board">The board where the tiles are placed</param>
-        /// <param name="cpuPlayer">The CPU player that makes a selection</param>
-        public void ComputerSelectionHard(Button selectedTile, List<Button> board, Cpu cpuPlayer)
-        {
-            // Check the corners first. Did the player put on of theirs in the corner? CPU blocks the player and put its selection in the middle
-
-
         }
 
         /// <summary>
