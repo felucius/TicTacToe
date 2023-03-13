@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using TicTacToe.Models;
 using TicTacToe.Models.Extensions;
 
@@ -157,6 +158,18 @@ namespace TicTacToe
                     NextGame();
                     break;
             }
+        }
+
+        /// <summary>
+        /// Go to the homescreen when the playground screen is closed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PlayGround_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            var startScreen = new StartScreen();
+            this.Hide();
+            startScreen.Show();
         }
     }
 }

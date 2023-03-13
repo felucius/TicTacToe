@@ -29,9 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.lblPlayer = new System.Windows.Forms.Label();
-            this.lblComputer = new System.Windows.Forms.Label();
-            this.tabTicTacToe = new System.Windows.Forms.TabControl();
+            this.computerTimer = new System.Windows.Forms.Timer(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.lblDifficulty = new System.Windows.Forms.Label();
             this.btnRestart = new System.Windows.Forms.Button();
@@ -44,41 +42,16 @@
             this.btnTile3 = new System.Windows.Forms.Button();
             this.btnTile2 = new System.Windows.Forms.Button();
             this.btnTile1 = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.computerTimer = new System.Windows.Forms.Timer(this.components);
-            this.tabTicTacToe.SuspendLayout();
+            this.lblPlayer = new System.Windows.Forms.Label();
+            this.lblComputer = new System.Windows.Forms.Label();
+            this.tabTicTacToe = new System.Windows.Forms.TabControl();
             this.tabPage1.SuspendLayout();
+            this.tabTicTacToe.SuspendLayout();
             this.SuspendLayout();
             // 
-            // lblPlayer
+            // computerTimer
             // 
-            this.lblPlayer.AutoSize = true;
-            this.lblPlayer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblPlayer.Location = new System.Drawing.Point(9, 10);
-            this.lblPlayer.Name = "lblPlayer";
-            this.lblPlayer.Size = new System.Drawing.Size(70, 28);
-            this.lblPlayer.TabIndex = 0;
-            this.lblPlayer.Text = "label1";
-            // 
-            // lblComputer
-            // 
-            this.lblComputer.AutoSize = true;
-            this.lblComputer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblComputer.Location = new System.Drawing.Point(9, 53);
-            this.lblComputer.Name = "lblComputer";
-            this.lblComputer.Size = new System.Drawing.Size(70, 28);
-            this.lblComputer.TabIndex = 1;
-            this.lblComputer.Text = "label1";
-            // 
-            // tabTicTacToe
-            // 
-            this.tabTicTacToe.Controls.Add(this.tabPage1);
-            this.tabTicTacToe.Controls.Add(this.tabPage2);
-            this.tabTicTacToe.Location = new System.Drawing.Point(12, 12);
-            this.tabTicTacToe.Name = "tabTicTacToe";
-            this.tabTicTacToe.SelectedIndex = 0;
-            this.tabTicTacToe.Size = new System.Drawing.Size(657, 790);
-            this.tabTicTacToe.TabIndex = 2;
+            this.computerTimer.Tick += new System.EventHandler(this.computerTimer_Tick);
             // 
             // tabPage1
             // 
@@ -222,19 +195,34 @@
             this.btnTile1.UseVisualStyleBackColor = true;
             this.btnTile1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // tabPage2
+            // lblPlayer
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(649, 757);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Upcoming game..";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.lblPlayer.AutoSize = true;
+            this.lblPlayer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblPlayer.Location = new System.Drawing.Point(9, 10);
+            this.lblPlayer.Name = "lblPlayer";
+            this.lblPlayer.Size = new System.Drawing.Size(70, 28);
+            this.lblPlayer.TabIndex = 0;
+            this.lblPlayer.Text = "label1";
             // 
-            // computerTimer
+            // lblComputer
             // 
-            this.computerTimer.Tick += new System.EventHandler(this.computerTimer_Tick);
+            this.lblComputer.AutoSize = true;
+            this.lblComputer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblComputer.Location = new System.Drawing.Point(9, 53);
+            this.lblComputer.Name = "lblComputer";
+            this.lblComputer.Size = new System.Drawing.Size(70, 28);
+            this.lblComputer.TabIndex = 1;
+            this.lblComputer.Text = "label1";
+            // 
+            // tabTicTacToe
+            // 
+            this.tabTicTacToe.Controls.Add(this.tabPage1);
+            this.tabTicTacToe.Location = new System.Drawing.Point(12, 12);
+            this.tabTicTacToe.Name = "tabTicTacToe";
+            this.tabTicTacToe.SelectedIndex = 0;
+            this.tabTicTacToe.Size = new System.Drawing.Size(657, 790);
+            this.tabTicTacToe.TabIndex = 2;
             // 
             // PlayGround
             // 
@@ -244,31 +232,30 @@
             this.Controls.Add(this.tabTicTacToe);
             this.Name = "PlayGround";
             this.Text = "Tic Tac Toe";
-            this.tabTicTacToe.ResumeLayout(false);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PlayGround_FormClosed);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabTicTacToe.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private Label lblPlayer;
-        private Label lblComputer;
-        private TabControl tabTicTacToe;
+        private System.Windows.Forms.Timer computerTimer;
         private TabPage tabPage1;
-        private TabPage tabPage2;
-        private Button btnTile3;
-        private Button btnTile2;
-        private Button btnTile1;
+        private Label lblDifficulty;
+        private Button btnRestart;
         private Button btnTile9;
         private Button btnTile8;
         private Button btnTile7;
         private Button btnTile6;
         private Button btnTile5;
         private Button btnTile4;
-        private Button btnRestart;
-        private System.Windows.Forms.Timer computerTimer;
-        private Label lblDifficulty;
+        private Button btnTile3;
+        private Button btnTile2;
+        private Button btnTile1;
+        private Label lblPlayer;
+        private Label lblComputer;
+        private TabControl tabTicTacToe;
     }
 }
