@@ -122,7 +122,7 @@ namespace TicTacToe
                     break;
 
                 case DifficultyEnum.INTERMEDIATE:
-                    gameLogic.ComputerSelectionIntermediate(cpuSelection, boardGame, cpuPlayer);
+                    gameLogic.ComputerSelectionIntermediate(cpuSelection, boardGame, cpuPlayer, player);
                     break;
 
                 case DifficultyEnum.HARD:

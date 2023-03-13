@@ -7,13 +7,17 @@ namespace TicTacToe.Models
     {
         private readonly Random randomSelection;
         readonly List<KeyValuePair<Button, int>> board;
-        private bool firstMoveMade;
+        private KeyValuePair<Button, bool> tileIsMatchedHorizontal, tileIsMatchedVertical, tileIsMatchedCross;
+        private KeyValuePair<Button, bool> tileIsMatched;
 
         public GameLogic()
         {
             board = new List<KeyValuePair<Button, int>>();
+            tileIsMatched = new KeyValuePair<Button, bool>();
+            tileIsMatchedHorizontal = new KeyValuePair<Button, bool>();
+            tileIsMatchedVertical = new KeyValuePair<Button, bool>();
+            tileIsMatchedCross = new KeyValuePair<Button, bool>();
             randomSelection = new Random();
-            firstMoveMade = false;
         }
 
         /// <summary>
@@ -166,7 +170,7 @@ namespace TicTacToe.Models
         /// <param name="selectedTile">The selected tile by the CPI</param>
         /// <param name="board">The board where the tiles are placed</param>
         /// <param name="cpuPlayer">The CPU player that makes a selection</param>
-        public void ComputerSelectionIntermediate(Button selectedTile, List<Button> board, Cpu cpuPlayer)
+        public void ComputerSelectionIntermediate(Button selectedTile, List<Button> board, Cpu cpuPlayer, Player player)
         {
             var cornerTiles = new List<int>()
             {
@@ -178,7 +182,7 @@ namespace TicTacToe.Models
                 var selection = randomSelection.Next(board.Count);
 
                 // Check the corners first. Did the player select the first tile in one of the corners? CPU follows up on that
-                if (board.Count(x=>x.Text == "X") == 1)
+                if (board.Count(x => x.Text == player.GetUserIcon()) == 1)
                 {
                     do
                     {
@@ -191,33 +195,45 @@ namespace TicTacToe.Models
                         }
                     }
                     while (!cornerTiles.Any(x => selection == x));
-
                 }
                 else
                 {
-                    foreach (var tile in board)
+                    // Check on horizontal lines
+                    tileIsMatchedHorizontal = CheckHorizontalLines(selectedTile, board, player.GetUserIcon());
+
+                    // Check on vertical lines
+                    tileIsMatchedVertical = CheckVerticalLines(selectedTile, board, player.GetUserIcon());
+
+                    // Check on cross lines
+                    tileIsMatchedCross = CheckCrossLines(selectedTile, board, player.GetUserIcon());
+
+                    if (tileIsMatchedHorizontal.Value)
                     {
-                        // Check if board tiles was not set by CPU
-                        if (tile.Text != cpuPlayer.GetUserIcon() && tile.Text != string.Empty)
-                        {
-                            // Check on horizontal lines
-                            selectedTile = CheckHorizontalLines(selectedTile, board);
-
-                            // Check on vertical lines
-                            selectedTile = CheckVerticalLines(selectedTile, board);
-
-                            // Check on cross lines
-                            selectedTile = CheckCrossLines(selectedTile, board);
-                        }
+                        selectedTile = tileIsMatchedHorizontal.Key;
+                        break;
+                    }
+                    else if (tileIsMatchedVertical.Value)
+                    {
+                        selectedTile = tileIsMatchedVertical.Key;
+                        break;
+                    }
+                    else if (tileIsMatchedCross.Value)
+                    {
+                        selectedTile = tileIsMatchedCross.Key;
+                        break;
                     }
                 }
 
-                // Check on cross lines
+                if (!tileIsMatched.Value && board.Count(x => x.Text == player.GetUserIcon()) >= 2)
+                {
+                    selection = randomSelection.Next(board.Count);
+                    selectedTile = board[selection];
+                }
+
             }
             while (selectedTile.Text != string.Empty && board.Any(x => x.Enabled == true));
 
             FillInSelectedTile(selectedTile, cpuPlayer);
-            firstMoveMade = true;
         }
 
         /// <summary>
@@ -248,147 +264,162 @@ namespace TicTacToe.Models
             }
         }
 
-        private Button CheckHorizontalLines(Button selectedTile, List<Button> board)
+        private KeyValuePair<Button, bool> SelectEmptyBoardTile(List<Button> board, int index)
+        {
+            var selectedTile = board[index];
+            if (selectedTile.Text.Equals(string.Empty))
+            {
+                tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, true);
+                return tileIsMatched;
+            }
+
+            return new KeyValuePair<Button, bool>();
+        }
+
+        private KeyValuePair<Button, bool> CheckHorizontalLines(Button selectedTile, List<Button> board, string playerIcon)
         {
             // First row
-            if (board[0].Text == "X" && board[1].Text == "X")
+            if (board[0].Text == playerIcon && board[1].Text == playerIcon)
             {
-                selectedTile = board[2];
+                return SelectEmptyBoardTile(board, 2);
             }
 
-            if (board[1].Text == "X" && board[2].Text == "X")
+            if (board[1].Text == playerIcon && board[2].Text == playerIcon)
             {
-                selectedTile = board[0];
+                return SelectEmptyBoardTile(board, 0);
             }
 
-            if (board[0].Text == "X" && board[2].Text == "X")
+            if (board[0].Text == playerIcon && board[2].Text == playerIcon)
             {
-                selectedTile = board[1];
+                return SelectEmptyBoardTile(board, 1);
             }
 
             // Second row
-            if (board[3].Text == "X" && board[4].Text == "X")
+            if (board[3].Text == playerIcon && board[4].Text == playerIcon)
             {
-                selectedTile = board[5];
+                return SelectEmptyBoardTile(board, 5);
             }
 
-            if (board[4].Text == "X" && board[5].Text == "X")
+            if (board[4].Text == playerIcon && board[5].Text == playerIcon)
             {
-                selectedTile = board[3];
+                return SelectEmptyBoardTile(board, 3);
             }
 
-            if (board[3].Text == "X" && board[5].Text == "X")
+            if (board[3].Text == playerIcon && board[5].Text == playerIcon)
             {
-                selectedTile = board[4];
+                return SelectEmptyBoardTile(board, 4);
             }
 
             // Third row
-            if (board[6].Text == "X" && board[7].Text == "X")
+            if (board[6].Text == playerIcon && board[7].Text == playerIcon)
             {
-                selectedTile = board[8];
+                return SelectEmptyBoardTile(board, 8);
             }
 
-            if (board[7].Text == "X" && board[8].Text == "X")
+            if (board[7].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[6];
+                return SelectEmptyBoardTile(board, 6);
             }
 
-            if (board[6].Text == "X" && board[8].Text == "X")
+            if (board[6].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[7];
+                return SelectEmptyBoardTile(board, 7);
             }
-
-            return selectedTile;
+            
+            tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, false);
+            return tileIsMatched;
         }
 
-        private Button CheckVerticalLines(Button selectedTile, List<Button> board)
+        private KeyValuePair<Button, bool> CheckVerticalLines(Button selectedTile, List<Button> board, string playerIcon)
         {
             // First row
-            if (board[0].Text == "X" && board[3].Text == "X")
+            if (board[0].Text == playerIcon && board[3].Text == playerIcon)
             {
-                selectedTile = board[6];
+                return SelectEmptyBoardTile(board, 6);
             }
 
-            if (board[3].Text == "X" && board[6].Text == "X")
+            if (board[3].Text == playerIcon && board[6].Text == playerIcon)
             {
-                selectedTile = board[0];
+                return SelectEmptyBoardTile(board, 0);
             }
 
-            if (board[0].Text == "X" && board[6].Text == "X")
+            if (board[0].Text == playerIcon && board[6].Text == playerIcon)
             {
-                selectedTile = board[3];
+                return SelectEmptyBoardTile(board, 3);
             }
 
             // Second row
-            if (board[1].Text == "X" && board[4].Text == "X")
+            if (board[1].Text == playerIcon && board[4].Text == playerIcon)
             {
-                selectedTile = board[7];
+                return SelectEmptyBoardTile(board, 7);
             }
 
-            if (board[4].Text == "X" && board[7].Text == "X")
+            if (board[4].Text == playerIcon && board[7].Text == playerIcon)
             {
-                selectedTile = board[1];
+                return SelectEmptyBoardTile(board, 1);
             }
 
-            if (board[1].Text == "X" && board[7].Text == "X")
+            if (board[1].Text == playerIcon && board[7].Text == playerIcon)
             {
-                selectedTile = board[4];
+                return SelectEmptyBoardTile(board, 4);
             }
 
             // Third row
-            if (board[2].Text == "X" && board[5].Text == "X")
+            if (board[2].Text == playerIcon && board[5].Text == playerIcon)
             {
-                selectedTile = board[8];
+                return SelectEmptyBoardTile(board, 8);
             }
 
-            if (board[5].Text == "X" && board[8].Text == "X")
+            if (board[5].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[2];
+                return SelectEmptyBoardTile(board, 2);
             }
 
-            if (board[2].Text == "X" && board[8].Text == "X")
+            if (board[2].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[5];
+                return SelectEmptyBoardTile(board, 5);
             }
 
-            return selectedTile;
+            tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, false);
+            return tileIsMatched;
         }
 
-        private Button CheckCrossLines(Button selectedTile, List<Button> board)
+        private KeyValuePair<Button, bool> CheckCrossLines(Button selectedTile, List<Button> board, string playerIcon)
         {
             // First cross
-            if (board[0].Text == "X" && board[4].Text == "X")
+            if (board[0].Text == playerIcon && board[4].Text == playerIcon)
             {
-                selectedTile = board[8];
+                return SelectEmptyBoardTile(board, 8);
             }
 
-            if (board[4].Text == "X" && board[8].Text == "X")
+            if (board[4].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[0];
+                return SelectEmptyBoardTile(board, 0);
             }
 
-            if (board[0].Text == "X" && board[8].Text == "X")
+            if (board[0].Text == playerIcon && board[8].Text == playerIcon)
             {
-                selectedTile = board[4];
+                return SelectEmptyBoardTile(board, 4);
             }
 
             // Second cross
-            if (board[2].Text == "X" && board[4].Text == "X")
+            if (board[2].Text == playerIcon && board[4].Text == playerIcon)
             {
-                selectedTile = board[6];
+                return SelectEmptyBoardTile(board, 6);
             }
 
-            if (board[4].Text == "X" && board[6].Text == "X")
+            if (board[4].Text == playerIcon && board[6].Text == playerIcon)
             {
-                selectedTile = board[2];
+                return SelectEmptyBoardTile(board, 2);
             }
 
-            if (board[2].Text == "X" && board[6].Text == "X")
+            if (board[2].Text == playerIcon && board[6].Text == playerIcon)
             {
-                selectedTile = board[4];
+                return SelectEmptyBoardTile(board, 4);
             }
 
-            return selectedTile;
+            tileIsMatched = new KeyValuePair<Button, bool>(selectedTile, false);
+            return tileIsMatched;
         }
     }
 }
